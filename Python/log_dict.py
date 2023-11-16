@@ -1,5 +1,17 @@
 from typing import TextIO, Optional
 
+def vars_log(object, log_dict: dict, independent: Optional[tuple] = None):
+    if independent is not None:
+        name, value = independent
+        if name not in log_dict:
+            log_dict[name] = []
+        log_dict[name].append(value)
+
+    for name, value in vars(object).items():
+        if name not in log_dict:
+            log_dict[name] = []
+        log_dict[name].append(value)
+
 def log_dict_csv(file: TextIO, dictionary: dict) -> Optional[str]:
     if file.closed:
         return None
