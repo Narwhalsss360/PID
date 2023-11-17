@@ -1,9 +1,12 @@
-from log_dict import *
-from pid import *
-from continuous_calculus import *
-from sample import *
+"""Tester"""
 
-def f(x):
+from time import time_ns, sleep
+from log_dict import log_dict_csv, vars_log
+from pid import pid
+from continuous_calculus import f_deriv, f_int
+from sample import sample
+
+def f(x: float) -> float:
     return x ** 2
 
 #region Logger Test
@@ -32,7 +35,7 @@ for i, (x, y) in enumerate(xy_samples):
     
 xy_data['integral(f(x)dx)'] = [ int for x, int in xy_int]
 
-with open('xy_test_data.csv', 'w') as file:
+with open('xy_test_data.csv', 'w', encoding='utf-8') as file:
     log_dict_csv(file, xy_data)
 #endregion
 
@@ -43,7 +46,7 @@ for x_scaled in range(0, 100):
     coordinate = sample(x, f(x))
     vars_log(coordinate, sample_log, ('t', time_ns()))
 
-with open('samples.csv', 'w') as samples_file:
+with open('samples.csv', 'w', encoding='utf-8') as samples_file:
     log_dict_csv(samples_file, sample_log)
 #endregion
 
@@ -54,8 +57,9 @@ for x_scaled in range(0, 100):
     x = x_scaled / 10
     out = controller.process(x, 0)
     vars_log(controller, controller_log, ('out', out))
+    sleep(0.08)
 
-with open('controller_test.csv', 'w') as controller_log_file:
+with open('controller_test.csv', 'w', encoding='utf-8') as controller_log_file:
     log_dict_csv(controller_log_file, controller_log)
 #endregion
 

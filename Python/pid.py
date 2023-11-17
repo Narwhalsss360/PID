@@ -7,24 +7,37 @@ class pid:
         self.__K_i = K_i
         self.__K_d = K_d
 
+        self.p = 0
         self.i = 0
+        self.d = 0
         self.__e = 0
+
+        self.y = None
+        self.r = None
+
         self.__t_now = 0
+
+        self.__T_START = None
         self.__e_previous = 0
         self.__t_previous = 0
 
-    def __t(self):
-        return time_ns() / 1000000
+    def __t(self) -> float:
+        if self.__T_START is None:
+            self.__T_START = time_ns()
+        return (time_ns() - self.__T_START) / 1e9
 
-    def __de(self):
+    def __de(self) -> float:
         return self.e - self.__e_previous
 
-    def __dt(self):
+    def __dt(self) -> float:
         return self.__t() - self.__t_previous
 
     def process(self, y, r) -> float:
-        self.e = r - y
+        self.r = r
+        self.y = y
+        self.e = y - r
         self.__t_now = self.__t()
+
         self.p = self.__K_p * self.e
 
         self.i = f_int(self.e, self.__dt(), self.i)
