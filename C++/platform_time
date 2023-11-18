@@ -1,0 +1,14 @@
+#ifndef platform
+#define platform
+
+#include <stdint.h>
+#include <time.h>
+
+static time_t __start_time__ = time(NULL);
+
+static double pgm_time_s()
+{
+    return difftime(time(NULL), __start_time__);
+}
+
+#endif
